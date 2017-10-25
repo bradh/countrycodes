@@ -6,6 +6,14 @@
     <version>0.1-SNAPSHOT</version>
     <name>Country Codes Implementation</name>
     <packaging>jar</packaging>
+
+    <parent>
+        <groupId>net.frogmouth.countrycodes</groupId>
+        <artifactId>countrycodes-parent</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -71,6 +79,26 @@
                     <packageName>net.frogmouth.countrycodes.generated</packageName>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 </project>
