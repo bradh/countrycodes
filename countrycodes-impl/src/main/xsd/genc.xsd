@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen SCHSchema="http://api.nsgreg.nga.mil/schema/genc/3.0.0/genc.sch"?>
+<schema xmlns:genc="http://api.nsgreg.nga.mil/schema/genc/3.0" xmlns:genc-cmn="http://api.nsgreg.nga.mil/schema/genc/3.0/genc-cmn" xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://api.nsgreg.nga.mil/schema/genc/3.0" elementFormDefault="qualified" version="3.0.0" xml:lang="en">
+    <annotation>
+        <documentation>Accompanying specification published at: http://nsgreg.nga.mil/doc/view?i=2379. XML type components shall always be used as specified without further restriction unless documented by, and accomplished using, Schematron assertions.</documentation>
+    </annotation>
+    <!--================== Imports ====================-->
+    <!-- <import namespace="http://api.nsgreg.nga.mil/schema/genc/3.0/genc-cmn" schemaLocation="http://api.nsgreg.nga.mil/schema/genc/3.0.0/genc-cmn.xsd"/> -->
+    <import namespace="http://api.nsgreg.nga.mil/schema/genc/3.0/genc-cmn" schemaLocation="./genc-cmn.xsd"/>
+    <!-- ================================================
+
+                                Components for the GENC Standard
+
+                v3.0.0 revisions:
+                    GENCStandardBaselineIndex
+                            Renamed: GeopoliticalEntity to GeopoliticalEntityEntry
+                            Renamed: AdministrativeSubdivision to AdministrativeSubdivisionEntry
+                    GENCStandardBaseline
+                            Deleted: genc:ISOCountryEntry, genc:ISOCountrySubdivisionEntry
+                    GeopoliticalEntityEntryType
+                            Deleted: char3CodeStatus, char2CodeStatus, numericCodeStatus, unLegalStatus, remarks
+                            Renamed: subdivision to division
+                    LocalizedNameType
+                            Deleted: nameLanguage2Char, nameLanguage3Char
+                    AdministrativeSubdivisionEntryType
+                            Deleted: char6CodeStatus, codeISODetermined
+                            Renamed: parentSubdivision to parentDivision
+                    AdministrativeSubdivisionNameType
+                            Deleted: nameLanguage2Char, nameLanguage3Char, nameVariant, romanizationSystem, remarks
+                    AdministrativeSubdivisioningInfo
+                            Deleted: subdivisionSource, romanizationSystem, codeSource, remarks
+                    AdministrativeSubdivisionCategoryType
+                            Renamed: count nimOccurs from 0 to 1
+                    ISOCountryEntryType
+                            Renamed: subdivision to division
+                    ISOCountrySubdivisionEntryType
+                            Renamed: parentSubdivision to parentDivision
+                    moved ISO elements and types to (new) iso.xsd since the GENC no longer uses ISO Entries
+                    moved simple types to genc-cmn.xsd: AlphaNumeric3Type, AlphaNumeric2Type, Numeric3DigitType, AlphaNumeric6Type
+                    moved usRecognitionCode from genc-cmn.xsd
+                    revised documentation throughout
+
+                v2.0.0 revisions:
+                    GENCStandardBaselineIndex
+                            Added: AdministrativeSubdivision.country
+                    GeopoliticalEntityEntry:
+                            Deleted bgnShortNameVariance, bgnFullNameVariance, usRecognizedSovereignty (v1.2.0), gencAdditionalInfo
+                    AdministrativeSubdivisionEntry:
+                            Deleted: gencAdditionalInfo
+                    LocalizedName:
+                            Deleted: bgnNameVariance
+
+                    ISOCountryEntry:
+                            Deleted: bgnShortNameVariance, bgnFullNameVariance, usRecognizedSovereignty (v1.2.0), gencAdditionalInfo
+                            Added: gencNotesOnNaming, gencNotesOnTerritory
+                    ISOCountrySubdivisionEntry:
+                            Deleted: gencAdditionalInfo
+                            Added: gencEntryDate, gencSuccessorEntryDate, gencEntryType, gencNotesOnNaming, gencNotesOnTerritory
+
+		            ISOCountrySubdivisionNameType:
+                            Deleted: bgnNameVariance
+                            Added: gencConventional, gencPreferred
+                    AdministrativeSubdivisionNameType:
+                            Deleted: bgnNameVariance
+                            Added: gencConventional, gencPreferred
+
+                v1.2.0 revisions:
+                    Revised domain of GeopoliticalEntityEntry: usRecognition (genc-cmn:USRecognitionCode)
+                    Deprecated one element in GeopoliticalEntityEntry: usRecognizedSovereignty
+                    Added one element to GeopoliticalEntityEntry: usRecognitionNote
+                    Revised domain of ISOCountryEntry: usRecognition (genc-cmn:USRecognitionCode)
+                    Deprecated one element in ISOCountryEntry: usRecognizedSovereignty
+                    Added one element to ISOCountryEntry: usRecognitionNote
+
+                v1.1.0 extensions:
+                    Added one element to GENCStandardBaselineIndex: successorPromulgationDate
+                    Added one element to GENCStandardBaseline: successorPromulgationDate
+                    Added three elements to ISOCountryEntryType: gencEntryDate, gencSuccessorEntryDate, & gencEntryType.
+                        Will reorganize GENC-associated information for ISO Entries in v2.0.0, including the replacement
+                        of element gencAdditionalInfo with elements notesOnNaming and notesOnTerritory.
+
+                    Added one element to ISOStandardBaselineIndex: successorPromulgationDate
+                    Added one element to ISOStandardBaseline: successorPromulgationDate
+
+    ===================================================-->
+    <!--============ Standard Baseline Index ==============-->
+    <element name="GENCStandardBaselineIndex">
+        <annotation>
+            <documentation>
+                A set of entries in the GENC Standard, whose information content is limited with respect to a specified content baseline, consisting only of codespace, code, and name information. A GENC content baseline is established by publication of either an edition or a subsequent change notice, and is identified by a unique codespace.</documentation>
+        </annotation>
+        <complexType>
+            <sequence>
+                <element name="authority" type="string">
+                    <annotation>
+                        <documentation>
+                            The authority by which the specified baseline of the standard is established.</documentation>
+                    </annotation>
+                </element>
+                <element name="baseline" type="string">
+                    <annotation>
+                        <documentation>
+                            The unique identifier of a set of content of the standard, which is authorized for use beginning on a specified date.</documentation>
+                    </annotation>
+                </element>
+                <element name="promulgationDate" type="date">
+                    <annotation>
+                        <documentation>
+                            The date on which the content baseline of the standard was promulgated for use in information specification and/or exchange.</documentation>
+                    </annotation>
+                </element>
+                <!-- Added in v1.1.0 to capture the date that this baseline was replaced by another baseline. -->
+                <element name="successorPromulgationDate" type="date" minOccurs="0">
+                    <annotation>
+                        <documentation>
+                            The date on which this content baseline of the standard was replaced with another content baseline of the standard. The content of the successor baseline may revise or confirm the content of this baseline.</documentation>
+                    </annotation>
+                </element>
+                <!-- <element ref="genc:GeopoliticalEntityEntry" minOccurs="0" maxOccurs="unbounded"/> -->
+                <element name="GeopoliticalEntityEntry" minOccurs="0" maxOccurs="unbounded">
+                    <annotation>
+                        <documentation>
+                            A dated, individual information record containing names, and codes used for the representation of names, of a geopolitical entity.</documentation>
+                    </annotation>
+                    <complexType>
+                        <sequence>
+                            <element name="encoding" type="genc-cmn:ISOCountryCodesType">
+                                <annotation>
+                                    <documentation>
+                                        The set of Uniform Resource Identifiers (URI) and codes that are used to designate the name(s) of the referenced geopolitical entity.</documentation>
+                                </annotation>
+                            </element>
+                            <element name="name" type="string">
+                                <annotation>
+                                    <documentation>
+                                        The short name of the referenced geopolitical entity, in all capital letters with diacritical marks where applicable.</documentation>
+                                </annotation>
+                            </element>
+                            <element name="shortName" type="string">
+                                <annotation>
+                                    <documentation>
+                                        The short name of the referenced geopolitical entity.</documentation>
+                                </annotation>
+                            </element>
+                            <element name="fullName" type="string">
+                                <annotation>
+                                    <documentation>
+                                        The full name of the referenced geopolitical entity.</documentation>
+                                </annotation>
+                            </element>
+                        </sequence>
+                    </complexType>
+                </element>
+                <!-- <element ref="genc:AdministrativeSubdivisionEntry" minOccurs="0" maxOccurs="unbounded"/> -->
+                <element name="AdministrativeSubdivisionEntry" minOccurs="0" maxOccurs="unbounded">
+                    <annotation>
+                        <documentation>
+                            A dated, individual information record containing names, and codes used for the representation of names, of an administratively subordinate division of a geopolitical entity.</documentation>
+                    </annotation>
+                    <complexType>
+                        <sequence>
+                            <!-- country: reference to a GeopoliticalEntityEntry (realizes entrySeries.countryEntrySeries.entry) -->
+                            <element name="country" type="genc-cmn:CodeWithCodeSpace" minOccurs="0">
+                                <annotation>
+                                    <documentation>
+                                        A corresponding dated, individual information record in the GENC Standard containing names, and codes used for the representation of names, of the geopolitical entity to which the administrative subdivision corresponding to this administrative subdivision entry is administratively subordinate.</documentation>
+                                </annotation>
+                            </element>
+                            <element name="encoding" type="genc-cmn:ISOCountrySubdivisionCodesType">
+                                <annotation>
+                                    <documentation>
+                                        The set of Uniform Resource Identifiers (URI) and codes that are used to designate the name(s) of the referenced administrative subdivision.</documentation>
+                                </annotation>
+                            </element>
+                            <!-- use Conventional, else Preferred, name -->
+                            <element name="name" type="string">
+                                <annotation>
+                                    <documentation>
+                                        A language-specific name for the referenced administrative subdivision.</documentation>
+                                </annotation>
+                            </element>
+                        </sequence>
+                    </complexType>
+                </element>
+            </sequence>
+        </complexType>
+    </element>
+    <!--============ Standard Baseline ==============-->
+    <element name="GENCStandardBaseline">
+        <annotation>
+            <documentation>
+                A set of entries in the GENC Standard, whose information content is complete with respect to a specified baseline. A GENC content baseline is established by publication of either an edition or a subsequent change notice, and is identified by a unique codespace.</documentation>
+        </annotation>
+        <complexType>
+            <sequence>
+                <element name="authority" type="string">
+                    <annotation>
+                        <documentation>
+                            The authority by which the specified content baseline of the standard is established.</documentation>
+                    </annotation>
+                </element>
+                <element name="baseline" type="string">
+                    <annotation>
+                        <documentation>
+                            The unique identifier of a set of content of the standard, which is authorized for use beginning on a specified date.</documentation>
+                    </annotation>
+                </element>
+                <element name="promulgationDate" type="date">
+                    <annotation>
+                        <documentation>
+                            The date on which the content baseline of the standard was promulgated for use in information specification and/or exchange.</documentation>
+                    </annotation>
+                </element>
+                <!-- Added in v1.1.0 to capture the date that this baseline was replaced by another baseline. -->
+                <element name="successorPromulgationDate" type="date" minOccurs="0">
+                    <annotation>
+                        <documentation>
+                            The date on which this content baseline of the standard was replaced with another content baseline of the standard. The content of the successor baseline may revise or confirm the content of this baseline.</documentation>
+                    </annotation>
+                </element>
+                <!-- ideally, always require populated geopolitical entities -->
+                <element ref="genc:GeopoliticalEntityEntry" minOccurs="0" maxOccurs="unbounded">
+                    <annotation>
+                        <documentation>
+                            A dated, individual information record containing names, and codes used for the representation of names, of a geopolitical entity.</documentation>
+                    </annotation>
+                </element>
+                <element ref="genc:AdministrativeSubdivisionEntry" minOccurs="0" maxOccurs="unbounded">
+                    <annotation>
+                        <documentation>
+                            A dated, individual information record containing names, and codes used for the representation of names, of an administratively subordinate division of a geopolitical entity.</documentation>
+                    </annotation>
+                </element>
+            </sequence>
+        </complexType>
+    </element>
+    <!--============ GENC Entry Elements ==============-->
+    <element name="GeopoliticalEntityEntry" type="genc:GeopoliticalEntityEntryType">
+        <annotation>
+            <documentation>
+                A dated, individual information record containing names, and codes used for the representation of names, of a geopolitical entity.</documentation>
+        </annotation>
+    </element>
+    <element name="AdministrativeSubdivisionEntry" type="genc:AdministrativeSubdivisionEntryType">
+        <annotation>
+            <documentation>
+                A dated, individual information record containing names, and codes used for the representation of names, of an administratively subordinate division of a geopolitical entity.</documentation>
+        </annotation>
+    </element>
+    <!--============ Geopolitical Entity Entry Type ==============-->
+    <complexType name="GeopoliticalEntityEntryType">
+        <annotation>
+            <documentation>
+                A dated, individual information record containing names, and codes used for the representation of names, of a geopolitical entity.</documentation>
+        </annotation>
+        <sequence>
+            <element name="encoding" type="genc-cmn:ISOCountryCodesType">
+                <annotation>
+                    <documentation>
+                        The set of Uniform Resource Identifiers (URI) and codes that are used to designate the name(s) of the referenced geopolitical entity.</documentation>
+                </annotation>
+            </element>
+            <element name="name" type="string">
+                <annotation>
+                    <documentation>
+                        The short name of the referenced geopolitical entity, in all capital letters with diacritical marks where applicable.</documentation>
+                </annotation>
+            </element>
+            <element name="shortName" type="string">
+                <annotation>
+                    <documentation>
+                        The short name of the referenced geopolitical entity.</documentation>
+                </annotation>
+            </element>
+            <element name="fullName" type="string">
+                <annotation>
+                    <documentation>
+                        The full name of the referenced geopolitical entity.</documentation>
+                </annotation>
+            </element>
+            <element name="gencStatus" type="genc:GENCStatusCode">
+                <annotation>
+                    <documentation>
+                        The profile-status of this geopolitical entity entry with respect to any corresponding ISO 3166-1 country entry. NOTE: Geopolitical entities in the GENC Standard may be either included directly from ISO 3166-1 or may be revised or extended.</documentation>
+                </annotation>
+            </element>
+            <element name="entryDate" type="date">
+                <annotation>
+                    <documentation>
+                        The date of the determination by the Country Codes Working Group (CCWG) that affected (i.e., changed or reaffirmed) information about the geopolitical entity regarding which whose information is recorded in this entry.</documentation>
+                </annotation>
+            </element>
+            <element name="successorEntryDate" type="date" minOccurs="0">
+                <annotation>
+                    <documentation>
+                        The date that this entry was replaced with another entry, as authorized by the Country Codes Working Group (CCWG), recording information in the same GENC geopolitical entity entry series. The content of the successor entry may revise or confirm the content of this entry.</documentation>
+                </annotation>
+            </element>
+            <element name="entryType" type="genc-cmn:EntryTypeCode">
+                <annotation>
+                    <documentation>
+                        The type of change to the GENC Standard names, or codes used for the representation of the names, of a geopolitical entity that is recorded by this entry; one of {Unchanged, Creation, Revision, Deletion}.</documentation>
+                </annotation>
+            </element>
+            <element name="usRecognition" type="genc:USRecognitionCode">
+                <annotation>
+                    <documentation>
+                        The status of the referenced geopolitical entity, as recognized by the United States Government.</documentation>
+                </annotation>
+            </element>
+            <element name="usRecognitionNote" type="string" minOccurs="0">
+                <annotation>
+                    <documentation>
+                        In the case of a U.S. Recognition of "Other", a statement of the nature of the recognition and any involved geopolitical entities. EXAMPLES: "Part of the Kingdom of the Netherlands", "Occupied by China, claimed by Taiwan and Vietnam".</documentation>
+                </annotation>
+            </element>
+            <element name="entryNotesOnNaming" type="string" minOccurs="0">
+                <annotation>
+                    <documentation>
+                        A detailed description of differences in naming between the GENC Standard entry and the corresponding ISO 3166 Standard entry, if any, also including name-related update(s) made to the GENC Standard by a CCWG action.</documentation>
+                </annotation>
+            </element>
+            <element name="entryNotesOnTerritory" type="string" minOccurs="0">
+                <annotation>
+                    <documentation>
+                        A detailed description of differences in geospatial extent or sovereignty between the GENC Standard entry and the corresponding ISO 3166 Standard entry, if any.</documentation>
+                </annotation>
+            </element>
+            <!-- division: reference to an AdministrativeSubdivisionEntry (realizes entrySeries.divisionEntrySeries.entry) -->
+            <element name="division" type="genc-cmn:CodeWithCodeSpace" minOccurs="0" maxOccurs="unbounded">
+                <annotation>
+                    <documentation>
+                        A corresponding dated, individual information record in the GENC Standard containing names, and codes used for the representation of names, of an administrative subdivision which is administratively subordinate to the geopolitical entity corresponding to this geopolitical entity entry, if any.</documentation>
+                </annotation>
+            </element>
+            <element name="localShortName" type="genc:LocalizedNameType" minOccurs="0" maxOccurs="unbounded">
+                <annotation>
+                    <documentation>
+                        A short form of the name of the referenced geopolitical entity in the applicable administrative language(s) of the geopolitical entity. NOTE1: A local short name is an alternative BGN-approved name in an administrative language of the geopolitical entity, as available. NOTE2: An administrative language is a written language used by the administration of a geopolitical entity at the national level.</documentation>
+                </annotation>
+            </element>
+        </sequence>
+    </complexType>
+    <!--=============== Localized Name =================-->
+    <complexType name="LocalizedNameType">
+        <annotation>
+            <documentation>
+                A name along with a specification of the language, if available, in which it is expressed.</documentation>
+        </annotation>
+        <sequence>
+            <element name="name" type="string">
+                <annotation>
+                    <documentation>
+                        A name as used in a specified language and constituting information about geopolitical entities and/or administrative subdivision categories.</documentation>
+                </annotation>
+            </element>
+            <element name="iso6393Char3Code" type="genc-cmn:iso6393char3CodeType">
+                <annotation>
+                    <documentation>
+                        The alpha-3 ISO 639-3 code of the language of the name. NOTE: ISO 639-3 was devised to provide a comprehensive set of identifiers for all languages for use in a wide range of applications, including linguistics, lexicography, and internationalization of information systems. It attempts to represent all known languages.</documentation>
+                </annotation>
+            </element>
+        </sequence>
+    </complexType>
+    <!--========== Administrative Subdivision Entry ============-->
+    <complexType name="AdministrativeSubdivisionEntryType">
+        <annotation>
+            <documentation>
+                A dated, individual information record containing names, and codes used for the representation of names, of an administratively subordinate division of a geopolitical entity.</documentation>
+        </annotation>
+        <sequence>
+            <element name="encoding" type="genc-cmn:ISOCountrySubdivisionCodesType">
+                <annotation>
+                    <documentation>
+                        The set of Uniform Resource Identifiers (URI) and codes that are used to designate the name(s) of the referenced administrative subdivision.</documentation>
+                </annotation>
+            </element>
+            <element name="subdivisionCategory" type="string">
+                <annotation>
+                    <documentation>
+                        The type of the applicable regional administrative subdivision of the geopolitical entity of the referenced administrative subdivision. The subdivision category is based on similar governmental structure, administrative authority, and responsibilities in each administrative subdivision belonging to the same category. NOTE: Administrative subdivisions belonging to the same category do not overlap in territory. EXAMPLES: U.S. state, French department, or Japanese prefecture.</documentation>
+                </annotation>
+            </element>
+            <element name="gencStatus" type="genc:GENCStatusCode">
+                <annotation>
+                    <documentation>
+                        The profile-status of this administrative subdivision entry with respect to any corresponding ISO 3166-2 country subdivision entry. NOTE: Administrative subdivision entries in the GENC Standard may be either in direct correspondence with entries in ISO 3166-2 or may be revised or extended.</documentation>
+                </annotation>
+            </element>
+            <element name="entryDate" type="date">
+                <annotation>
+                    <documentation>
+                        The date of the determination by the Country Codes Working Group (CCWG) that affected (i.e., changed or reaffirmed) information about the administrative subdivision regarding which information is recorded in this entry.</documentation>
+                </annotation>
+            </element>
+            <element name="successorEntryDate" type="date" minOccurs="0">
+                <annotation>
+                    <documentation>
+                        The date that this entry was replaced with another entry, as authorized by the Country Codes Working Group (CCWG), recording information in the same GENC administrative subdivision entry series. The content of the successor entry may revise or confirm the content of this entry.</documentation>
+                </annotation>
+            </element>
+            <element name="entryType" type="genc-cmn:EntryTypeCode">
+                <annotation>
+                    <documentation>
+                        The type of change to the GENC Standard names, or codes used for the representation of names, of an administrative subdivision that is recorded by this entry; one of {Unchanged, Creation, Revision, Deletion}.</documentation>
+                </annotation>
+            </element>
+            <element name="entryNotesOnNaming" type="string" minOccurs="0">
+                <annotation>
+                    <documentation>
+                        A detailed description of differences in naming between the GENC Standard entry and the corresponding ISO 3166 Standard entry, if any, also including name-related update(s) made to the GENC Standard by a CCWG action.</documentation>
+                </annotation>
+            </element>
+            <element name="entryNotesOnTerritory" type="string" minOccurs="0">
+                <annotation>
+                    <documentation>
+                        A detailed description of differences in geospatial extent or sovereignty between the GENC Standard entry and the corresponding ISO 3166 Standard entry, if any.</documentation>
+                </annotation>
+            </element>
+            <!-- parentDivision: reference to an AdministrativeSubdivisionEntry (realizes entrySeries.parentDivisionEntrySeries.entry) -->
+            <element name="parentDivision" type="genc-cmn:CodeWithCodeSpace" minOccurs="0">
+                <annotation>
+                    <documentation>
+                        The GENC Standard administrative subdivision, if any, to which this GENC Standard administrative subdivision is administratively subordinate.</documentation>
+                </annotation>
+            </element>
+            <!-- country: reference to a GeopoliticalEntityEntry (realizes entrySeries.countryEntrySeries.entry) -->
+            <element name="country" type="genc-cmn:CodeWithCodeSpace" minOccurs="0">
+                <annotation>
+                    <documentation>
+                        A corresponding dated, individual information record in the GENC Standard containing names, and codes used for the representation of names, of the geopolitical entity to which the administrative subdivision corresponding to this administrative subdivision entry is administratively subordinate.</documentation>
+                </annotation>
+            </element>
+            <element name="name" type="genc:AdministrativeSubdivisionNameType" maxOccurs="unbounded">
+                <annotation>
+                    <documentation>
+                        A language-specific name for the referenced administrative subdivision.</documentation>
+                </annotation>
+            </element>
+            <element name="subdivisionStructure" type="genc:AdministrativeSubdivisioningInfoType">
+                <annotation>
+                    <documentation>
+                        Information regarding organizational relationships between the referenced administrative subdivision and other administrative subdivisions of the same geopolitical entity.</documentation>
+                </annotation>
+            </element>
+        </sequence>
+    </complexType>
+    <!--========== Administrative Subdivision Name ============-->
+    <complexType name="AdministrativeSubdivisionNameType">
+        <annotation>
+            <documentation>
+                A name for an administrative subdivision, along with a specification of the language in which it is expressed and other name-related information.</documentation>
+        </annotation>
+        <sequence>
+            <element name="name" type="string">
+                <annotation>
+                    <documentation>
+                        A name for the administrative subdivision as used in a specified language.</documentation>
+                </annotation>
+            </element>
+            <element name="iso6393Char3Code" type="genc-cmn:iso6393char3CodeType">
+                <annotation>
+                    <documentation>
+                        The alpha-3 ISO 639-3 code of the language of the name. NOTE: ISO 639-3 was devised to provide a comprehensive set of identifiers for all languages for use in a wide range of applications, including linguistics, lexicography, and internationalization of information systems. It attempts to represent all known languages.</documentation>
+                </annotation>
+            </element>
+            <element name="gencConventional" type="boolean">
+                <annotation>
+                    <documentation>
+                        An indication that the name is a commonly used English-language name approved by the U.S. Board on Geographic Names (BGN) for use in addition to, or in lieu of, a BGN-approved local official name or names in a[n] area where English is not the official language.</documentation>
+                </annotation>
+            </element>
+            <element name="gencPreferred" type="boolean">
+                <annotation>
+                    <documentation>
+                        An indication that among the names specified for an administrative subdivision, the name is preferred, taking precedence over other names, although any or all of the names may be used.</documentation>
+                </annotation>
+            </element>
+        </sequence>
+    </complexType>
+    <!--========== Administrative Subdivisioning Info ============-->
+    <complexType name="AdministrativeSubdivisioningInfoType">
+        <annotation>
+            <documentation>
+                Information regarding organizational relationships between the administrative subdivisions of a geopolitical entity.</documentation>
+        </annotation>
+        <sequence>
+            <element name="category" type="genc:AdministrativeSubdivisionCategoryType" maxOccurs="unbounded">
+                <annotation>
+                    <documentation>
+                        A subdivision category that organizes the administrative subdivisions of a geopolitical entity.</documentation>
+                </annotation>
+            </element>
+        </sequence>
+    </complexType>
+    <!--========= Administrative Subdivision Category ===========-->
+    <complexType name="AdministrativeSubdivisionCategoryType">
+        <annotation>
+            <documentation>
+                A subdivision category that organizes the administrative subdivisions of a geopolitical entity. NOTE1: The subdivision category is based on similar governmental structure, administrative authority, and responsibilities in each administrative subdivision belonging to the category. NOTE2: Administrative subdivisions belonging to the same category do not overlap in territory. EXAMPLES: U.S. state, French department, or Japanese prefecture.</documentation>
+        </annotation>
+        <sequence>
+            <element name="count" type="integer" minOccurs="1">
+                <annotation>
+                    <documentation>
+                        The number of occurrences of the use of this subdivision category within a geopolitical entity.</documentation>
+                </annotation>
+            </element>
+            <element name="description" type="string" minOccurs="0">
+                <annotation>
+                    <documentation>
+                        A description of the subdivision category.</documentation>
+                </annotation>
+            </element>
+            <element name="categoryName" type="genc:LocalizedNameType" minOccurs="0" maxOccurs="unbounded">
+                <annotation>
+                    <documentation>
+                        A language-specific name for this subdivision category. NOTE1: A category name is an alternative BGN-established name in an administrative language of the geopolitical entity, as available. NOTE2: An administrative language is a written language used by the administration of a geopolitical entity at the national level.</documentation>
+                </annotation>
+            </element>
+        </sequence>
+    </complexType>
+    <!--============ Enumerations & Codelists ==============-->
+    <simpleType name="GENCStatusCode">
+        <annotation>
+            <documentation>
+                The status of a geopolitical entity or administrative subdivision entry in the GENC Standard with respect to the set of entries in ISO 3166.</documentation>
+        </annotation>
+        <restriction base="string">
+            <enumeration value="iso">
+                <annotation>
+                    <documentation>
+                        An ISO 3166/MA Officially Assigned code element that is included in the GENC Standard.</documentation>
+                </annotation>
+            </enumeration>
+            <enumeration value="exclusion">
+                <annotation>
+                    <documentation>
+                        An ISO 3166/MA Officially Assigned code element that shall not be included in the GENC Standard.</documentation>
+                </annotation>
+            </enumeration>
+            <enumeration value="exception">
+                <annotation>
+                    <documentation>
+                        An ISO 3166/MA Officially Assigned code element that is included in the GENC Standard, but whose associated entry content varies from the specification given by ISO 3166/MA (e.g., a difference in name).</documentation>
+                </annotation>
+            </enumeration>
+            <enumeration value="extension">
+                <annotation>
+                    <documentation>
+                        A code (and associated entry content) in the GENC Standard that is permitted by ISO 3166/MA but is not an ISO Officially Assigned code element.</documentation>
+                </annotation>
+            </enumeration>
+            <enumeration value="exigent">
+                <annotation>
+                    <documentation>
+                        A code (and associated entry content) in the GENC Standard that is not permitted by ISO 3166/MA. An Exigent entry uses a code assignment that does not conform to the ISO 3166 specification (e.g., consists of a mixture of alphabetic and numeric characters, when only alphabetic characters are allowed by the ISO 3166/MA).</documentation>
+                </annotation>
+            </enumeration>
+        </restriction>
+    </simpleType>
+    <simpleType name="USRecognitionCode">
+        <annotation>
+            <documentation>
+                The sovereignty of a geopolitical entity included in the GENC Standard, as recognized by the United States Government.</documentation>
+        </annotation>
+        <restriction base="string">
+            <enumeration value="other">
+                <annotation>
+                    <documentation>
+                        A territory that is neither recognized by the United States Government as an independent State nor is a United States dependency. The U.S. Recognition Note for the entry, if any, provides additional information.</documentation>
+                </annotation>
+            </enumeration>
+            <enumeration value="usDependency">
+                <annotation>
+                    <documentation>
+                        A non-independent territory of the United States for which the United States Government exercises one or more facets of government administration or policy.</documentation>
+                </annotation>
+            </enumeration>
+            <enumeration value="independent">
+                <annotation>
+                    <documentation>
+                        A territory constituting an independent State; in particular, a people politically organized into a sovereign State with a definite territory recognized as independent by the United States Government.</documentation>
+                </annotation>
+            </enumeration>
+        </restriction>
+    </simpleType>
+</schema>
