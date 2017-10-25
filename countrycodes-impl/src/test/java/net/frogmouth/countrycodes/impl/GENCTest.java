@@ -110,23 +110,98 @@ public class GENCTest {
     }
 
     @Test
-    public void lookupNameShortURN_twoCharAR() {
+    public void lookupNameResourceURL_threeChar() {
         GENC genc = new GENC();
         genc.initialise();
-        String name = genc.lookupName("ge:GENC:2:3-7:ARG");
+        String name = genc.lookupName("http://api.nsgreg.nga.mil/geo-political/GENC/3/3-7/AUS");
+        assertEquals("AUSTRALIA", name);
+    }
+
+    @Test
+    public void lookupNameResourceURL_twoChar() {
+        GENC genc = new GENC();
+        genc.initialise();
+        String name = genc.lookupName("http://api.nsgreg.nga.mil/geo-political/GENC/2/3-7/AU");
+        assertEquals("AUSTRALIA", name);
+    }
+
+    @Test
+    public void lookupNameResourceURN_threeChar() {
+        GENC genc = new GENC();
+        genc.initialise();
+        String name = genc.lookupName("urn:us:gov:dod:nga:def:geo-political:GENC:3:3-7:AUS");
+        assertEquals("AUSTRALIA", name);
+    }
+
+    @Test
+    public void lookupNameResourceURN_twoChar() {
+        GENC genc = new GENC();
+        genc.initialise();
+        String name = genc.lookupName("urn:us:gov:dod:nga:def:geo-political:GENC:2:3-7:AU");
+        assertEquals("AUSTRALIA", name);
+    }
+
+    @Test
+    public void lookupNameURN_based_threeChar() {
+        GENC genc = new GENC();
+        genc.initialise();
+        String name = genc.lookupName("geo-political:GENC:3:3-7:AUS");
+        assertEquals("AUSTRALIA", name);
+    }
+
+    @Test
+    public void lookupNameURN_based_twoChar() {
+        GENC genc = new GENC();
+        genc.initialise();
+        String name = genc.lookupName("geo-political:GENC:3:3-7:AUS");
+        assertEquals("AUSTRALIA", name);
+    }
+
+    @Test
+    public void lookupNameURN_based_numeric() {
+        GENC genc = new GENC();
+        genc.initialise();
+        String name = genc.lookupName("geo-political:GENC:n:3-7:036");
+        assertEquals("AUSTRALIA", name);
+    }
+
+    @Test
+    public void lookupNameShortURN_threeCharAR() {
+        GENC genc = new GENC();
+        genc.initialise();
+        String name = genc.lookupName("ge:GENC:3:3-7:ARG");
         assertEquals("ARGENTINA", name);
     }
 
     @Test
-    public void lookupNameShortURN_threeCharARG() {
+    public void lookupNameShortURN_twoCharNoCode() {
+        GENC genc = new GENC();
+        genc.initialise();
+        String name = genc.lookupName("ge:GENC:2:3-7:ZZ");
+        assertEquals("", name);
+    }
+
+    @Test
+    public void lookupNameShortURN_twoCharARG() {
         GENC genc = new GENC();
         genc.initialise();
         String name = genc.lookupName("ge:GENC:2:3-7:AR");
         assertEquals("ARGENTINA", name);
     }
 
-    /*
-    <genc-cmn:char3Code>ARG</genc-cmn:char3Code><genc-cmn:char3CodeURISet><genc-cmn:codespaceURL>http://api.nsgreg.nga.mil/geo-political/GENC/3/3-7</genc-cmn:codespaceURL><genc-cmn:codespaceURN>urn:us:gov:dod:nga:def:geo-political:GENC:3:3-7</genc-cmn:codespaceURN><genc-cmn:codespaceURNBased>geo-political:GENC:3:3-7</genc-cmn:codespaceURNBased><genc-cmn:codespaceURNBasedShort>ge:GENC:3:3-7</genc-cmn:codespaceURNBasedShort></genc-cmn:char3CodeURISet><genc-cmn:char2Code>AR</genc-cmn:char2Code><genc-cmn:char2CodeURISet><genc-cmn:codespaceURL>http://api.nsgreg.nga.mil/geo-political/GENC/2/3-7</genc-cmn:codespaceURL><genc-cmn:codespaceURN>urn:us:gov:dod:nga:def:geo-political:GENC:2:3-7</genc-cmn:codespaceURN><genc-cmn:codespaceURNBased>geo-political:GENC:2:3-7</genc-cmn:codespaceURNBased><genc-cmn:codespaceURNBasedShort>ge:GENC:2:3-7</genc-cmn:codespaceURNBasedShort></genc-cmn:char2CodeURISet><genc-cmn:numericCode>032</genc-cmn:numericCode><genc-cmn:numericCodeURISet><genc-cmn:codespaceURL>http://api.nsgreg.nga.mil/geo-political/GENC/n/3-7</genc-cmn:codespaceURL><genc-cmn:codespaceURN>urn:us:gov:dod:nga:def:geo-political:GENC:n:3-7</genc-cmn:codespaceURN><genc-cmn:codespaceURNBased>geo-political:GENC:n:3-7</genc-cmn:codespaceURNBased><genc-cmn:codespaceURNBasedShort>ge:GENC:n:3-7</genc-cmn:codespaceURNBasedShort></genc-cmn:numericCodeURISet></genc:encoding><genc:name>ARGENTINA</genc:name>
-    
-     */
+    @Test
+    public void lookupNameShortURN_threeCharNoCode() {
+        GENC genc = new GENC();
+        genc.initialise();
+        String name = genc.lookupName("ge:GENC:3:3-7:ZZZ");
+        assertEquals("", name);
+    }
+
+    @Test
+    public void lookupNameShortURN_numericARG() {
+        GENC genc = new GENC();
+        genc.initialise();
+        String name = genc.lookupName("ge:GENC:n:3-7:032");
+        assertEquals("ARGENTINA", name);
+    }
 }

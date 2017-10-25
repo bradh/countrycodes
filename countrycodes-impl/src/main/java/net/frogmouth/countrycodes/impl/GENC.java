@@ -70,18 +70,50 @@ public class GENC {
     }
 
     public String lookupName(String string) {
-        return lookupEntry(string).getName();
+        GeopoliticalEntityEntryType entry = lookupEntry(string);
+        return entry != null ? entry.getName() : "";
     }
 
-    private GeopoliticalEntityEntryType lookupEntry(String string) {
+    private GeopoliticalEntityEntryType lookupEntry(String identifierString) {
         verifyIsInitialised();
-        // TODO: improve parsing
-        String code = string.substring(string.lastIndexOf(':') + 1);
-        if (code.length() == 3) {
-            return findEntryByCodeAlpha3(code);
-        } else {
-            return findEntryByCodeAlpha2(code);
+        // TODO: maybe palm this off to a new query class
+        String identifierStringParts[] = identifierString.split(":");
+        String identifierFormat = getIdentifierFormat(identifierStringParts);
+
+        if ("URI".equals(identifierFormat)) {
+            identifierStringParts = identifierString.split("/");
         }
+        // TODO: check we have enough parts
+        String identifierCode = identifierStringParts[identifierStringParts.length - 1];
+        String identifierCodeType = identifierStringParts[identifierStringParts.length - 3];
+        if (identifierCodeType.equals("3")) {
+            return findEntryByCodeAlpha3(identifierCode);
+        } else if (identifierCodeType.equals("2")) {
+            return findEntryByCodeAlpha2(identifierCode);
+        } else if (identifierCodeType.equals("n")) {
+            return findEntryByNumeric(identifierCode);
+        }
+        return null;
+    }
+
+    // TODO: create an enum
+    private String getIdentifierFormat(String[] identifierStringParts) {
+        String identifierFormat = "unknown";
+        switch (identifierStringParts[0]) {
+            case "http":
+                identifierFormat = "URI";
+                break;
+            case "urn":
+                identifierFormat = "URN";
+                break;
+            case "geo-political":
+                identifierFormat = "URN-based";
+                break;
+            case "ge":
+                identifierFormat = "Short-URN-based";
+                break;
+        }
+        return identifierFormat;
     }
 
     // TODO: maybe pull up
@@ -122,6 +154,16 @@ public class GENC {
     private GeopoliticalEntityEntryType findEntryByCodeAlpha3(String code) {
         for (GeopoliticalEntityEntryType entry : baseline.getGeopoliticalEntityEntry()) {
             if (code.equals(entry.getEncoding().getChar3Code())) {
+                return entry;
+            }
+        }
+        return null;
+    }
+
+    private GeopoliticalEntityEntryType findEntryByNumeric(String code) {
+        int intCode = Integer.parseInt(code);
+        for (GeopoliticalEntityEntryType entry : baseline.getGeopoliticalEntityEntry()) {
+            if (intCode == entry.getEncoding().getNumericCode()) {
                 return entry;
             }
         }
